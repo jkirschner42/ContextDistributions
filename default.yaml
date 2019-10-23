@@ -1,0 +1,18 @@
+main:
+  experiment: febo.experiment.SimpleExperiment  # Experiment
+  log_level_console: INFO
+  log_level_file: INFO
+  modules:
+   - febo.experiment.SimpleExperiment
+   - febo.experiment.experiment.Experiment
+   - febo.controller.SimpleController
+   - febo.experiment.MultiExperiment
+   - febo.controller.RepetitionController
+   - febo.models.ConfidenceBoundModel
+   - febo.algorithms.UCB
+   - febo.environment.benchmarks.BenchmarkEnvironment
+   - febo.environment.benchmarks.NoiseFunction
+   - sbcd.algorithms.ucb.UCBCD
+   - sbcd.environment.CDEnvironment
+   - sbcd.environment.movielens.Movielens
+  experiment_dir: runs/

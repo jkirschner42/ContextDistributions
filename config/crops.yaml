@@ -1,0 +1,64 @@
+controller:
+  repetitions: 10  # Number of repetitions each experiment is run.
+  store_fields: [t, y_exact, y_max]
+  T: 1000  # Horizon
+
+environment.benchmark:
+  seed:  # Seed for randomly generated environments.
+  num_domain_points: 100
+  dimension: 3
+  noise_obs_mode: none  # Can be set to "full", "evaluation" or "hidden".
+  noise_function: 0.1
+
+
+experiment.multi:
+  label: sbcd.labels.label
+  multi_controller: febo.controller.multi.RepetitionController
+  iterator:
+  # Exact UCB
+  - environment.benchmark:exact_context: true
+    algorithm.ucbcd:observe_context: true
+    algorithm.ucbcd:l: 1
+    model:beta: 1
+
+#  # With Context Observations
+  - environment.benchmark:exact_context: false
+    algorithm.ucbcd:observe_context: true
+    algorithm.ucbcd:l: -1
+    model:beta: 1
+
+  - environment.benchmark:exact_context: false
+    algorithm.ucbcd:observe_context: true
+    algorithm.ucbcd:l: 10
+    model:beta: 1
+
+#
+  - environment.benchmark:exact_context: false
+    algorithm.ucbcd:observe_context: true
+    algorithm.ucbcd:l: 100
+    model:beta: 1
+#
+#  # No Context Observations
+  - environment.benchmark:exact_context: false
+    algorithm.ucbcd:observe_context: false
+    algorithm.ucbcd:l: -1
+    model:beta: 1
+
+  - environment.benchmark:exact_context: false
+    algorithm.ucbcd:observe_context: false
+    algorithm.ucbcd:l: 10
+    model:beta: 1
+#
+  - environment.benchmark:exact_context: false
+    algorithm.ucbcd:observe_context: false
+    algorithm.ucbcd:l: 100
+    model:beta: 1
+
+
+  fixed_environment: false  # If true, only one environment for the whole batch will be created. Use this, if you randomly genrate your environment, but the whole batch should use the same random instance of the environment.
+experiment.simple:
+  algorithm: sbcd.algorithms.ucb.UCBCD
+  environment: sbcd.environment.agroscope.AgroscopeCrops
+  controller: febo.controller.SimpleController
+main:
+  experiment: febo.experiment.multi.MultiExperiment  # Experiment
